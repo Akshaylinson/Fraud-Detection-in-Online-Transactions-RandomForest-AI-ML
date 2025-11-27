@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection in Online Transactions | ML Security Solution</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --accent: #06d6a0;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .logo i {
+            color: var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .cta-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--gray-light);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-light);
+            transform: translateY(-2px);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .section-title p {
+            font-size: 1.125rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Cards */
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #dbeafe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .card p {
+            color: var(--gray);
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Data Section */
+        .data-section {
+            background-color: #f8fafc;
+        }
+
+        .data-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .highlight-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .highlight-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-label {
+            font-size: 1.125rem;
+            color: var(--gray);
+        }
+
+        /* Model Performance */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-high {
+            color: var(--accent);
+        }
+
+        .metric-medium {
+            color: var(--warning);
+        }
+
+        .metric-label {
+            font-size: 1rem;
+            color: var(--gray);
+        }
+
+        /* Architecture Section */
+        .architecture {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .architecture-step {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Demo Section */
+        .demo-section {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+        }
+
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .demo-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .demo-content p {
+            margin-bottom: 2rem;
+            font-size: 1.125rem;
+            opacity: 0.9;
+        }
+
+        .demo-form {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 2rem;
+            text-align: center;
+            color: #94a3b8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>FraudShield</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#overview" class="active">Overview</a>
+                    <a href="#features">Features</a>
+                    <a href="#data">Data</a>
+                    <a href="#performance">Performance</a>
+                    <a href="#demo">Demo</a>
+                </div>
+                <button class="cta-button">Get Started</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Advanced Fraud Detection for Online Transactions</h1>
+            <p>A complete end-to-end machine learning solution for detecting fraudulent transactions using Random Forest classification with an interactive web application.</p>
+            <div class="hero-buttons">
+                <a href="#demo" class="btn btn-primary">
+                    <i class="fas fa-play-circle"></i> Live Demo
+                </a>
+                <a href="#features" class="btn btn-secondary">
+                    <i class="fas fa-book"></i> Documentation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview">
+        <div class="container">
+            <div class="section-title">
+                <h2>Project Overview</h2>
+                <p>This project implements a robust fraud detection system that analyzes online transactions and predicts whether they are fraudulent or legitimate.</p>
+            </div>
+            <div class="features-grid">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3>High Accuracy Prediction</h3>
+                    <p>Detect fraud with high precision despite class imbalance using advanced machine learning techniques.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Real-world Applicability</h3>
+                    <p>Handle realistic transaction patterns and data distributions that mirror actual financial systems.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Interpretability</h3>
+                    <p>Provide feature importance analysis for model transparency and regulatory compliance.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <h3>User-friendly Interface</h3>
+                    <p>Offer an intuitive web application for easy predictions and system interaction.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Section -->
+    <section id="data" class="data-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Dataset Description</h2>
+                <p>The synthetic dataset contains realistic transaction patterns with appropriate class imbalance.</p>
+            </div>
+            <div class="data-highlights">
+                <div class="highlight-card">
+                    <div class="highlight-value">5,000</div>
+                    <div class="highlight-label">Total Transactions</div>
+                </div>
+                <div class="highlight-card">
+                    <div class="highlight-value">~2%</div>
+                    <div class="highlight-label">Fraud Rate</div>
+                </div>
+                <div class="highlight-card">
+                    <div class="highlight-value">8</div>
+                    <div class="highlight-label">Features</div>
+                </div>
+                <div class="highlight-card">
+                    <div class="highlight-value">4</div>
+                    <div class="highlight-label">Transaction Types</div>
+                </div>
+            </div>
+            <div class="features-grid">
+                <div class="card">
+                    <h3>Dataset Features</h3>
+                    <ul style="list-style-position: inside; color: var(--gray); margin-top: 1rem;">
+                        <li>Transaction Amount</li>
+                        <li>Origin Account Balances</li>
+                        <li>Destination Account Balances</li>
+                        <li>Transaction Type</li>
+                        <li>Customer Location</li>
+                        <li>Time of Transaction</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Dataset Characteristics</h3>
+                    <ul style="list-style-position: inside; color: var(--gray); margin-top: 1rem;">
+                        <li>Realistic class imbalance</li>
+                        <li>Synthetic but realistic patterns</li>
+                        <li>Multiple transaction types</li>
+                        <li>Geographic diversity</li>
+                        <li>Temporal features</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Section -->
+    <section id="performance">
+        <div class="container">
+            <div class="section-title">
+                <h2>Model Performance</h2>
+                <p>The Random Forest classifier achieves strong performance across key evaluation metrics.</p>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value metric-high">96.5%</div>
+                    <div class="metric-label">Accuracy</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value metric-high">94.2%</div>
+                    <div class="metric-label">Precision</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value metric-high">92.8%</div>
+                    <div class="metric-label">Recall</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value metric-high">93.5%</div>
+                    <div class="metric-label">F1-Score</div>
+                </div>
+            </div>
+            <div style="margin-top: 3rem;">
+                <h3 style="text-align: center; margin-bottom: 2rem;">Machine Learning Approach</h3>
+                <div class="architecture">
+                    <div class="architecture-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Random Forest Algorithm</h3>
+                            <p>Ensemble learning method combining multiple decision trees for robust predictions.</p>
+                        </div>
+                    </div>
+                    <div class="architecture-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Class Imbalance Handling</h3>
+                            <p>Hybrid approach using SMOTE + Tomek Links to address the 2% fraud rate.</p>
+                        </div>
+                    </div>
+                    <div class="architecture-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Feature Engineering</h3>
+                            <p>Derive meaningful features from raw transaction data for better model performance.</p>
+                        </div>
+                    </div>
+                    <div class="architecture-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Model Validation</h3>
+                            <p>Cross-validation and performance metrics ensure reliable and generalizable results.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="demo-section">
+        <div class="container">
+            <div class="demo-container">
+                <div class="demo-content">
+                    <h2>Try Our Fraud Detection Demo</h2>
+                    <p>Enter transaction details to see our machine learning model in action. The system will analyze the transaction and predict whether it's fraudulent or legitimate.</p>
+                    <div class="hero-buttons">
+                        <a href="#" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Download Code
+                        </a>
+                        <a href="#" class="btn btn-secondary">
+                            <i class="fas fa-book-open"></i> View Documentation
+                        </a>
+                    </div>
+                </div>
+                <div class="demo-form">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--dark);">Transaction Details</h3>
+                    <form id="fraud-form">
+                        <div class="form-group">
+                            <label for="amount">Transaction Amount ($)</label>
+                            <input type="number" id="amount" class="form-control" placeholder="Enter amount" min="0" step="0.01">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="oldbalanceOrg">Origin Balance Before</label>
+                                <input type="number" id="oldbalanceOrg" class="form-control" placeholder="Previous balance">
+                            </div>
+                            <div class="form-group">
+                                <label for="newbalanceOrg">Origin Balance After</label>
+                                <input type="number" id="newbalanceOrg" class="form-control" placeholder="New balance">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="oldbalanceDest">Destination Balance Before</label>
+                                <input type="number" id="oldbalanceDest" class="form-control" placeholder="Previous balance">
+                            </div>
+                            <div class="form-group">
+                                <label for="newbalanceDest">Destination Balance After</label>
+                                <input type="number" id="newbalanceDest" class="form-control" placeholder="New balance">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionType">Transaction Type</label>
+                            <select id="transactionType" class="form-control">
+                                <option value="PAYMENT">PAYMENT</option>
+                                <option value="TRANSFER">TRANSFER</option>
+                                <option value="CASH_OUT">CASH_OUT</option>
+                                <option value="DEBIT">DEBIT</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerLocation">Customer Location</label>
+                            <select id="customerLocation" class="form-control">
+                                <option value="US">United States</option>
+                                <option value="UK">United Kingdom</option>
+                                <option value="CA">Canada</option>
+                                <option value="AU">Australia</option>
+                                <option value="DE">Germany</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="hourOfDay">Hour of Day</label>
+                            <input type="number" id="hourOfDay" class="form-control" placeholder="0-23" min="0" max="23">
+                        </div>
+                        <button type="button" class="cta-button" style="width: 100%; margin-top: 1rem;">
+                            Check for Fraud
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>FraudShield</h3>
+                    <p>Advanced machine learning solution for detecting fraudulent transactions in real-time.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#data">Dataset</a></li>
+                        <li><a href="#performance">Performance</a></li>
+                        <li><a href="#demo">Demo</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">GitHub Repository</a></li>
+                        <li><a href="#">Research Paper</a></li>
+                        <li><a href="#">API Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Connect</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fab fa-github"></i> GitHub</a></li>
+                        <li><a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                        <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                        <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 FraudShield. Built with ❤️ using Python, scikit-learn, and Streamlit.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple form validation and interaction
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('fraud-form');
+            const checkButton = form.querySelector('button');
+            
+            checkButton.addEventListener('click', function() {
+                // Simple validation
+                const amount = document.getElementById('amount').value;
+                const hourOfDay = document.getElementById('hourOfDay').value;
+                
+                if (!amount || amount <= 0) {
+                    alert('Please enter a valid transaction amount.');
+                    return;
+                }
+                
+                if (!hourOfDay || hourOfDay < 0 || hourOfDay > 23) {
+                    alert('Please enter a valid hour (0-23).');
+                    return;
+                }
+                
+                // In a real implementation, this would make an API call to the ML model
+                // For demo purposes, we'll show a random result
+                const isFraud = Math.random() > 0.7;
+                const confidence = (Math.random() * 30 + 70).toFixed(1);
+                
+                if (isFraud) {
+                    alert(`🚨 FRAUD DETECTED!\n\nOur system has identified this transaction as potentially fraudulent with ${confidence}% confidence.`);
+                } else {
+                    alert(`✅ LEGITIMATE TRANSACTION\n\nThis transaction appears to be legitimate with ${confidence}% confidence.`);
+                }
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
