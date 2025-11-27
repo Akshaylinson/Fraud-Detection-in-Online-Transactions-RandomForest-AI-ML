@@ -1,0 +1,14 @@
+feature,importance
+amount,0.17643315966355208
+transaction_type_DEBIT,0.11075360549261988
+transaction_type_PAYMENT,0.10998038575593483
+hour_of_day,0.10972493095302656
+newbalanceOrg,0.10371581626044722
+oldbalanceDest,0.09513574395330374
+newbalanceDest,0.07691566227944023
+oldbalanceOrg,0.06791204957742773
+transaction_type_TRANSFER,0.04927419630947249
+customer_location_DE,0.035932176381511215
+customer_location_UK,0.024593416824368414
+customer_location_US,0.022106651915557617
+customer_location_CA,0.01752220463333786
